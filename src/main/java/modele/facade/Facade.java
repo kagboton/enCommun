@@ -3,15 +3,19 @@ package modele.facade;
 import modele.beans.Competence;
 import modele.beans.Membre;
 import modele.beans.Projet;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class Facade implements IFacade {
 
 
     private List<Membre> membresInscrits;
     private List<Membre> membresConnectes;
+
 
     //Quelques membres
         Membre membre1 = new  Membre("toto", "123", "toto");
@@ -31,19 +35,35 @@ public class Facade implements IFacade {
         Projet projet3 = new Projet("Apollon 3", "Allons tous sur la lune");
 
 
-
-
+    /**
+     * Constructeur par défaut
     public Facade() {
-
-    }
+        this.initialisation(); // Pas besoin si on met le @PostConstruct
+    }*/
 
     @Override
     public boolean inscription(String login, String mdp, String surnom) {
-        return false;
+        //Verifions si le login n'est pas déja pris
+        for(Membre m : membresInscrits){
+            if(m.getLogin().equals(login)){
+                return false;
+            }
+        }
+        //Si je suis ici c'est que le login n'est pas déjà pris
+        membresInscrits.add(new Membre(login, mdp, surnom));
+
+        return true;
     }
 
     @Override
     public boolean connexion(String login, String mdp) {
+        //Verifions que le couple login et mot de passe existe
+        for(Membre m: membresInscrits){
+            if(m.getLogin().equals(login) && m.getMotDePasse().equals(mdp)){
+                membresConnectes.add(m);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -52,9 +72,21 @@ public class Facade implements IFacade {
         return false;
     }
 
+
+    @Override
+    public Membre findMemberByLogin(String login) {
+        for(Membre m : membresConnectes){
+            if(login.equals(m.getLogin())){
+                return m;
+            }
+        }
+        return null;
+    }
+
     /**
      * Methode d'initialisation des listes avec les objets créés
      */
+    @PostConstruct
     private void initialisation(){
         //Initialisation
         membresInscrits = new ArrayList<>();
@@ -64,7 +96,6 @@ public class Facade implements IFacade {
         membresInscrits.add(membre1);
         membresInscrits.add(membre2);
         membresInscrits.add(membre3);
-
 
     }
 }

@@ -1,5 +1,7 @@
 package modele.facade;
 
+import modele.beans.Membre;
+
 public interface IFacade {
 
     /**
@@ -7,7 +9,7 @@ public interface IFacade {
      * @param login
      * @param mdp
      * @param surnom
-     * @return
+     * @return true si l'inscription s'est bien passé et false si le login est déjà pris
      */
     public boolean inscription(String login, String mdp, String surnom);
 
@@ -15,7 +17,7 @@ public interface IFacade {
      * Connexion d'un membre existant
      * @param login
      * @param mdp
-     * @return
+     * @return true si les identifiants sont correctes et false sinon
      */
     public boolean connexion(String login, String mdp);
 
@@ -25,5 +27,12 @@ public interface IFacade {
      * @return
      */
     public boolean deconnexion(String login);
+
+    /**
+     * Retrouver un membre à partir de son login
+     * @param login
+     * @return l'objet Membre correspondant ou null si le login n'existe pas
+     */
+    public Membre findMemberByLogin(String login);
 
 }
