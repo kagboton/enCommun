@@ -35,4 +35,11 @@ public interface IFacade {
      */
     public Membre findMemberByLogin(String login);
 
+    /**
+     * Savoir si un utilisateur est connecté ou pas
+     * @param login
+     * @return true si le membre est connecté, false sinon
+     */
+    public boolean estConnecte(String login);
+
 }

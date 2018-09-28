@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: KilianAgboton
@@ -19,10 +20,22 @@
 
     <h1>Bienvenu sur notre site collaboratif</h1>
 
-    <ul>
-        <li><a href="/connexion">Se connecter </a></li>
-        <li><a href="/inscription">S'inscrire </a></li>
-    </ul>
+    <c:if test="${empty sessionScope.mCourant}">
+        <ul>
+            <li><a href="/connexion">Se connecter </a></li>
+            <li><a href="/inscription">S'inscrire </a></li>
+        </ul>
+    </c:if>
+
+    <c:if test="${!empty sessionScope.mCourant}">
+        <ul>
+            <li><a href="/dashboard">Dashboard </a></li>
+            <li><a href="/deconnexion">Se deconnecter </a></li>
+        </ul>
+    </c:if>
+
+
+
 
 
     <%--<script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>

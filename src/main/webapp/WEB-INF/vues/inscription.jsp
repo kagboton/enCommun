@@ -39,10 +39,10 @@
     <input type = "text" name = "login" id="login" class="form-control" placeholder="Login" required autofocus>
 
     <label for="mdp" class="sr-only">Mot de passe :</label>
-    <input type = "password" name = "mdp" id="mdp" class="form-control" placeholder="Mot de passe" required >
+    <input type = "password" name = "mdp" id="mdp" class="form-control" placeholder="Mot de passe" required autofocus>
 
-    <label for="surnom" class="sr-only">Login : </label>
-    <input type = "text" name = "surnom" id="surnom" class="form-control" placeholder="Surnom" required autofocus>
+    <label for="surnom" class="sr-only">Surnom : </label>
+    <input type = "text" name = "surnom" id="surnom" class="form-control" placeholder="Surnom" required >
 
 
     <button class="btn btn-lg btn-primary btn-block" type="submit">Inscription</button>

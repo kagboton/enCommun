@@ -36,6 +36,13 @@
             <strong>Erreur !</strong> <c:out value="${erreurConnexion}"/>
         </div>
     </c:if>
+    <c:if test="${!empty erreurDejaConnecte}">
+        <div class="alert alert-danger" role="alert">
+            <a href="#" class="close" data-dismiss="alert"
+               aria-label="close">×</a>
+            <strong>Erreur !</strong> <c:out value="${erreurDejaConnecte}"/>
+        </div>
+    </c:if>
 
 
     <label for="login" class="sr-only">Login : </label>

@@ -1,5 +1,6 @@
 package servlets;
 
+import modele.beans.Membre;
 import modele.facade.IFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -15,6 +16,10 @@ import java.io.IOException;
 @WebServlet(name = "Inscription", urlPatterns = "/inscription")
 public class Inscription extends HttpServlet {
 
+    Boolean inscription = false;
+    Membre membreCourant = null;
+
+
     @Autowired
     private IFacade facade; //Injection du service Facade
 
@@ -27,20 +32,27 @@ public class Inscription extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.getServletContext().getRequestDispatcher("/WEB-INF/vues/inscription.jsp").forward(req, resp);
+        if(req.getSession().getAttribute("mCourant") != null ){//Si l'utilisateur est déjà connecté, je le renvoi vers son dashboard
+            this.getServletContext().getRequestDispatcher("/WEB-INF/vues/dashboard.jsp").forward(req, resp);
+        }else {//sinon
+            this.getServletContext().getRequestDispatcher("/WEB-INF/vues/inscription.jsp").forward(req, resp);
+        }
+
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         //Récupération des identifiants d'inscription
         String login = req.getParameter("login");
         String mdp = req.getParameter("mdp");
         String surnom = req.getParameter("surnom");
 
-        Boolean inscription = facade.inscription(login, mdp, surnom);
+        inscription = facade.inscription(login, mdp, surnom);
 
         if (inscription){
-            req.getSession().setAttribute("mCourant", facade.findMemberByLogin(login));
+            membreCourant = facade.findMemberByLogin(login);
+            req.getSession().setAttribute("mCourant", membreCourant);
             this.getServletContext().getRequestDispatcher("/WEB-INF/vues/dashboard.jsp").forward(req, resp);
         }else {
             String erreurInscription = "Login déjà pris";

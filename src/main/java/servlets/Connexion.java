@@ -1,5 +1,6 @@
 package servlets;
 
+import modele.beans.Membre;
 import modele.facade.IFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -10,10 +11,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
-@WebServlet(name = "Connexion", urlPatterns = "/connexion")
+@WebServlet(name = "Connexion", urlPatterns = {"/connexion", "/dashboard"})
 public class Connexion extends HttpServlet {
+
+    Membre membreCourant = null;
+    Boolean connecte = false;
 
     @Autowired
     private IFacade facade; //Injection du service Facade
@@ -27,8 +32,13 @@ public class Connexion extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //si l'utilisateur est dejà connecté, je le renvoi vers le dashboard
-        this.getServletContext().getRequestDispatcher("/WEB-INF/vues/connexion.jsp").forward(req, resp);
+        if(req.getSession().getAttribute("mCourant") != null ){//Si l'utilisateur est déjà connecté, je le renvoi vers son dashboard
+            this.getServletContext().getRequestDispatcher("/WEB-INF/vues/dashboard.jsp").forward(req, resp);
+        }else {//sinon
+            this.getServletContext().getRequestDispatcher("/WEB-INF/vues/connexion.jsp").forward(req, resp);
+        }
+
+
     }
 
     @Override
@@ -37,17 +47,27 @@ public class Connexion extends HttpServlet {
         String login = req.getParameter("login");
         String mdp = req.getParameter("mdp");
 
-        //Connexion
-        Boolean connecte = facade.connexion(login, mdp);
-
-        if(connecte){
-            req.getSession().setAttribute("mCourant", facade.findMemberByLogin(login));
-            this.getServletContext().getRequestDispatcher("/WEB-INF/vues/dashboard.jsp").forward(req, resp);
-        }else {
-            String erreurConnexion = "Les identifiants incorrectes";
-            req.setAttribute("erreurConnexion",erreurConnexion );
+        //Vérifier si le membre n'est pas déja connecté
+        if(facade.estConnecte(login)){
+            String erreurDejaConnecte = "Membre déjà connecté";
+            req.setAttribute("erreurDejaConnecte", erreurDejaConnecte );
             this.getServletContext().getRequestDispatcher("/WEB-INF/vues/connexion.jsp").forward(req, resp);
+        }else {
+            //Connexion
+            connecte = facade.connexion(login, mdp);
+
+            if(connecte){
+                membreCourant = facade.findMemberByLogin(login);
+                req.getSession().setAttribute("mCourant", membreCourant);
+                this.getServletContext().getRequestDispatcher("/WEB-INF/vues/dashboard.jsp").forward(req, resp);
+            }else {
+                String erreurConnexion = "Les identifiants incorrectes";
+                req.setAttribute("erreurConnexion",erreurConnexion );
+                this.getServletContext().getRequestDispatcher("/WEB-INF/vues/connexion.jsp").forward(req, resp);
+            }
         }
+
+
     }
 
 

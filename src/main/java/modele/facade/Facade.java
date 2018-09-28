@@ -85,6 +85,16 @@ public class Facade implements IFacade {
         return null;
     }
 
+    @Override
+    public boolean estConnecte(String login) {
+        for(Membre m : membresConnectes){
+            if(login.equals(m.getLogin())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Methode d'initialisation des listes avec les objets créés
      */
