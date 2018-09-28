@@ -51,6 +51,8 @@ public class Facade implements IFacade {
         }
         //Si je suis ici c'est que le login n'est pas déjà pris
         membresInscrits.add(new Membre(login, mdp, surnom));
+        //Je connecte directement le membre
+        membresConnectes.add(new Membre(login, mdp, surnom));
 
         return true;
     }
