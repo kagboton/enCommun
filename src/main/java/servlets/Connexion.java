@@ -47,26 +47,18 @@ public class Connexion extends HttpServlet {
         String login = req.getParameter("login");
         String mdp = req.getParameter("mdp");
 
-        //Vérifier si le membre n'est pas déja connecté
-        if(facade.estConnecte(login)){
-            String erreurDejaConnecte = "Membre déjà connecté";
-            req.setAttribute("erreurDejaConnecte", erreurDejaConnecte );
-            this.getServletContext().getRequestDispatcher("/WEB-INF/vues/connexion.jsp").forward(req, resp);
+        //Connexion
+        connecte = facade.connexion(login, mdp);
+
+        if(connecte){
+            membreCourant = facade.findMemberByLogin(login);
+            req.getSession().setAttribute("mCourant", membreCourant);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/vues/dashboard.jsp").forward(req, resp);
         }else {
-            //Connexion
-            connecte = facade.connexion(login, mdp);
-
-            if(connecte){
-                membreCourant = facade.findMemberByLogin(login);
-                req.getSession().setAttribute("mCourant", membreCourant);
-                this.getServletContext().getRequestDispatcher("/WEB-INF/vues/dashboard.jsp").forward(req, resp);
-            }else {
-                String erreurConnexion = "Les identifiants incorrectes";
-                req.setAttribute("erreurConnexion",erreurConnexion );
-                this.getServletContext().getRequestDispatcher("/WEB-INF/vues/connexion.jsp").forward(req, resp);
-            }
+            String erreurConnexion = "Les identifiants incorrectes";
+            req.setAttribute("erreurConnexion",erreurConnexion );
+            this.getServletContext().getRequestDispatcher("/WEB-INF/vues/connexion.jsp").forward(req, resp);
         }
-
 
     }
 

@@ -71,7 +71,14 @@ public class Facade implements IFacade {
 
     @Override
     public boolean deconnexion(String login) {
-        return false;
+        if(estConnecte(login)){
+            Membre m = findMemberByLogin(login); //Récuperer le membre
+            membresConnectes.remove(m); //Le remove de la liste membresConncetes
+            return true;
+        }else {
+            return false;
+        }
+
     }
 
 
