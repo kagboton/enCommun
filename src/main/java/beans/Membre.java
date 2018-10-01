@@ -1,12 +1,20 @@
-package modele.beans;
+package beans;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Membre {
 
     //Attributs
+    @Size(min = 4)
+    @NotNull
+    @NotBlank
     private String login;
+    @NotNull
+    @NotBlank
     private String motDePasse;
     private String surnom;
 

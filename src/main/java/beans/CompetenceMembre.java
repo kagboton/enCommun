@@ -1,4 +1,4 @@
-package modele.beans;
+package beans;
 
 public class CompetenceMembre {
 

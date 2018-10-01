@@ -1,6 +1,6 @@
-package modele.facade;
+package services;
 
-import modele.beans.Membre;
+import beans.Membre;
 
 public interface IFacade {
 

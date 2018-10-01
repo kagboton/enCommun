@@ -1,8 +1,8 @@
-package modele.facade;
+package services;
 
-import modele.beans.Competence;
-import modele.beans.Membre;
-import modele.beans.Projet;
+import beans.Competence;
+import beans.Membre;
+import beans.Projet;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
