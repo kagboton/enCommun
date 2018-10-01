@@ -7,12 +7,6 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
-    <context:component-scan base-package="modele"/>
-    <!-- <context:annotation-config/>
-    <context:spring-configured/>
-    -->
+    <context:component-scan base-package="modele.facade"/>
 
-    <!--
- <bean id="sr5" class="modele.Service5"/>
--->
 </beans>
