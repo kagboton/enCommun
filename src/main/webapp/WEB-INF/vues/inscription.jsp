@@ -9,13 +9,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-          crossorigin="anonymous">
-    <!-- Custom styles for this template -->
+    <link href="<c:url value="webjars/bootstrap/4.1.3/css/bootstrap.min.css" />" rel="stylesheet">
     <link href="/resources/css/connexion.css" rel="stylesheet">
-    <link href="/resources/css/accueil.css" rel="stylesheet">
 
     <title>En Commun - Inscription</title>
 </head>
@@ -56,7 +51,10 @@
     <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
 </form>
 
-<%--<%@ include file="footer.jsp" %>--%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="<c:url value="webjars/bootstrap/4.1.3/js/bootstrap.min.js" />"></script>
+<script src="<c:url value="webjars/jquery/3.3.1/jquery.min.js" />"></script>
+
 </body>
 
 </html>

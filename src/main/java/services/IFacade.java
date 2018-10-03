@@ -9,17 +9,17 @@ public interface IFacade {
      * @param login
      * @param mdp
      * @param surnom
-     * @return true si l'inscription s'est bien passé et false si le login est déjà pris
+     * @return un nouveau membre si l'inscription s'est bien passé et null si le login est déjà pris
      */
-    public boolean inscription(String login, String mdp, String surnom);
+    public Membre inscription(String login, String mdp, String surnom);
 
     /**
      * Connexion d'un membre existant
      * @param login
      * @param mdp
-     * @return true si les identifiants sont correctes et false sinon
+     * @return le membre si les identifiants sont correctes et null sinon
      */
-    public boolean connexion(String login, String mdp);
+    public Membre connexion(String login, String mdp);
 
     /**
      * Déconnexion d'un membre connecté
