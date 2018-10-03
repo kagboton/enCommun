@@ -10,6 +10,7 @@ import services.IFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -34,23 +35,31 @@ public class Controleur {
      * @param model
      * @return la jsp de connexion
      */
+
+    /**
+     * Accès à la page de connexion avec validation de saisies
+     * @param session
+     * @param model
+     * @return la jsp de connexion si l'utilisateur n'est pas connecté et la jsp tableau de bord s'il est déjà connecté
+     */
     @GetMapping(value = "/connexion")
-    public String connexion(Model model){
+    public String connexion(HttpSession session,
+            Model model){
+
+       if (facade.estConnecte((String)session.getAttribute("loginCourant"))) {
+           return "dashboard";
+       }
+
         model.addAttribute("membre", new Membre()); //pour faire fonctionner les tags spring
         return "connexion";
     }
 
     /**
      * Connexion d'un membre existant avec validation de saisie
-     * @return la jsp dashboard
-     */
-
-    /**
-     * Connexion d'un membre existant avec validation de saisie
      * @param membre l'objet membre utilisé pour récupérer les inputs
      * @param result contient les eventuelles erreurs
      * @param model le modèle au sens Spring
-     * @return
+     * @return la jsp (dashboard) du tableau de bord du membre
      */
     @PostMapping(value="/connexion")
     public String handleConnexion(
@@ -59,8 +68,10 @@ public class Controleur {
             BindingResult result,
             Model model){
 
-        if(result.hasErrors())
+        if(result.hasErrors()){//S'il y a une erreur lors de la connexion
+            model.addAttribute("erreurConnexion", result);
             return "connexion";
+        }
 
         Membre m = facade.connexion(membre.getLogin(), membre.getMotDePasse()); //connexion du membre
 
@@ -77,23 +88,65 @@ public class Controleur {
     }
 
     /**
-     * Accès à la page d'inscpription
+     * Accès à la page d'inscription avec validation de saisies
+     * @param session
+     * @param model
      * @return la jsp d'inscription
      */
     @GetMapping(value = "/inscription")
-    public String inscription(){
+    public String inscription(
+            HttpSession session,
+            Model model) {
+
+        if (facade.estConnecte((String)session.getAttribute("loginCourant"))) {
+            return "dashboard";
+        }
+        model.addAttribute("membre", new Membre()); //pour faire fonctionner les tags spring
         return "inscription";
     }
 
     /**
-     * Inscription d'un nouveau membre
-     * @return la jsp dashboard
+     * Inscription d'un membre existant avec validation de saisie
+     * @param membre l'objet membre utilisé pour récupérer les inputs
+     * @param result contient les eventuelles erreurs
+     * @param model le modèle au sens Spring
+     * @return la jsp (dashboard) du tableau de bord du membre
      */
     @PostMapping(value="/inscription")
-    public String handleInscription(){
+    public String handleInscription(
+            @ModelAttribute("membre")
+            @Valid Membre membre,
+            BindingResult result,
+            Model model ) {
 
-        //todo
+        if (result.hasErrors()){
+            model.addAttribute("erreurInscription", result);
+            return "inscription";
+        }
+
+        Membre m = facade.inscription(membre.getLogin(), membre.getMotDePasse(), membre.getSurnom()); //inscription d'un nouveau membre
+
+        if(m != null){
+            model.addAttribute("mCourant", m); //on ajoute le membre courant
+            model.addAttribute("loginCourant", m.getLogin()); //on met le login du membre courant en session
+            return "dashboard";
+        }else {
+            result.addError(
+                    new ObjectError("membre", "Utilisateur inconnu !"));//on ajoute une erreur de niveau objet
+            return "inscription";
+        }
+
+    }
+
+    @GetMapping(value = "/dashboard")
+    public String dashboard(){
         return "dashboard";
+    }
+
+    @GetMapping(value = "/deconnexion")
+    public String deconnexion(){
+        //mecanisme de déconnexiob
+        return "accueil";
     }
 
 

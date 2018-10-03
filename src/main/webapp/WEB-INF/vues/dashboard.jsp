@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link href="<c:url value="webjars/bootstrap/4.1.3/css/bootstrap.min.css" />" rel="stylesheet">
+    <link href="<c:url value="/webjars/bootstrap/4.1.3/css/bootstrap.min.css" />" rel="stylesheet">
     <link href="/resources/css/main.css" rel="stylesheet">
 
     <title>En Commun - Dashboard</title>
@@ -18,9 +18,9 @@
 <body>
 
     <div class="main-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <c:if test="${!empty mCourant}">
+        <c:if test="${!empty loginCourant}">
             <h1 class="display-4">
-                <c:out value="Bienvenu ${mCourant.surnom} !"/>
+                <c:out value="Bienvenu ${loginCourant} !"/>
             </h1>
         </c:if>
     </div>

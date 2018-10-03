@@ -12,7 +12,6 @@
                         <a class="dropdown-item" href="/deconnexion">Deconnexion</a>
                     </div>
                 </div>
-
             </c:if>
         </nav>
         <c:if test="${empty sessionScope.loginCourant}">

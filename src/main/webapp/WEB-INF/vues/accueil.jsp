@@ -21,7 +21,7 @@
     <div class="main-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
         <h1 class="display-4">EnCommun</h1>
         <p class="lead">Bienvenu sur EnCommun. L'outil collaboratif qui vous permet de gérer vos projets en toute simplicité. Ensemble relevons les plus grands défis.</p>
-        <c:if test="${empty sessionScope.mCourant}">
+        <c:if test="${empty sessionScope.loginCourant}">
             <a class="btn btn-outline-primary" href="/connexion">Connexion</a>
         </c:if>
 

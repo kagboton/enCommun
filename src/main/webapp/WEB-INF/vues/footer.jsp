@@ -6,8 +6,8 @@
     </footer>
 </div>
 
-<script src="<c:url value="webjars/bootstrap/4.1.3/js/bootstrap.min.js" />"></script>
-<script src="<c:url value="webjars/jquery/3.3.1/jquery.min.js" />"></script>
+<script src="<c:url value="/webjars/bootstrap/4.1.3/js/bootstrap.min.js" />"></script>
+<script src="<c:url value="/webjars/jquery/3.3.1/jquery.min.js" />"></script>
 <script>
     Holder.addTheme('thumb', {
         bg: '#55595c',

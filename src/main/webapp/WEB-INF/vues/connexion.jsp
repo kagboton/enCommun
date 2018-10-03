@@ -30,7 +30,7 @@
         <div class="alert alert-danger" role="alert">
             <a href="#" class="close" data-dismiss="alert"
                aria-label="close">×</a>
-            <strong>Erreur !</strong> <c:out value="${erreurConnexion}"/>
+            <strong>Erreur !</strong>
         </div>
     </c:if>
 
@@ -41,7 +41,7 @@
     <div class="form-group">
         <form:label path="motDePasse" class="sr-only">Mot de passe :</form:label>
         <form:password path="motDePasse" class="form-control" placeholder="Mot de passe"/>  <form:errors path="motDePasse" cssStyle="color:red;"/><br/>
-        <form:errors cssStyle="color:red;"/><br/>
+        <form:errors cssStyle="color:red;"/>
     </div>
 
     <button class="btn btn-lg btn-primary btn-block" type="submit">Connexion</button>
