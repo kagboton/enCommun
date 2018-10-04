@@ -16,8 +16,7 @@ public class Membre {
     @NotNull
     @NotBlank
     private String motDePasse;
-    @NotNull
-    @NotBlank
+
     private String surnom;
 
     private List<Projet> projetsParticites; //un membre peut participer à un ou plusieurs projets

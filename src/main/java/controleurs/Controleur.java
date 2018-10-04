@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.context.request.WebRequest;
 import services.IFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,7 +48,7 @@ public class Controleur {
     public String connexion(HttpSession session,
             Model model){
 
-       if (facade.estConnecte((String)session.getAttribute("loginCourant"))) {
+       if ((String)session.getAttribute("loginCourant") != null) {
            return "dashboard";
        }
 
@@ -132,21 +134,57 @@ public class Controleur {
             return "dashboard";
         }else {
             result.addError(
-                    new ObjectError("membre", "Utilisateur inconnu !"));//on ajoute une erreur de niveau objet
+                    new ObjectError("membre", "Utilisateur déja existant !"));//on ajoute une erreur de niveau objet
             return "inscription";
         }
 
     }
 
+    /**
+     * Accéder au dashboard du membre connecté
+     * @param session
+     * @return
+     */
     @GetMapping(value = "/dashboard")
-    public String dashboard(){
-        return "dashboard";
+    public String dashboard(HttpSession session){
+
+        if ((String)session.getAttribute("loginCourant") != null) {
+            return "dashboard";
+        }
+        return "accueil";
     }
 
+
+    /**
+     * Déconnexion d'un membre connecté
+     * @param log
+     * @param request
+     * @param sessionStatus
+     * @param model
+     * @return
+     */
     @GetMapping(value = "/deconnexion")
-    public String deconnexion(){
-        //mecanisme de déconnexiob
-        return "accueil";
+    public String deconnexion(@SessionAttribute(value = "loginCourant", required = false) String log, WebRequest request, SessionStatus sessionStatus, Model model){
+
+        if(facade.estConnecte(log)){ //si le membre est bien connecte
+            Boolean deconnecte = facade.deconnexion(log); // deconnexion du membre
+            if (deconnecte){//la déconnexion s'est bien passée
+                sessionStatus.setComplete();
+                request.removeAttribute(log, WebRequest.SCOPE_SESSION);
+                model.addAttribute("okDeconnexion", "Deconnexion effectuée avec succès");
+                return "accueil";
+
+            }else{//la deconnexion s'est pas bien passée
+                model.addAttribute("erreurDeconnexion", "Deconnexion impossible");
+                return "accueil";
+            }
+
+        }else{//Si le membre n'est pas connecté
+            model.addAttribute("erreurDeconnexion", "Deconnexion impossible");
+            return "accueil";
+        }
+
+
     }
 
 

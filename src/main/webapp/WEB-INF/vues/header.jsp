@@ -3,6 +3,7 @@
         <h5 class="my-0 mr-md-auto font-weight-normal">EnCommun</h5>
         <nav class="my-2 my-md-0 mr-md-3">
             <c:if test="${!empty sessionScope.loginCourant}">
+
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <c:out value="${loginCourant}"/>
