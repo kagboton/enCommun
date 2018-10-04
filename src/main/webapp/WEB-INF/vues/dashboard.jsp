@@ -9,22 +9,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-          crossorigin="anonymous">
-    <!-- Custom styles for this template -->
-    <link href="/resources/css/accueil.css" rel="stylesheet">
+    <link href="<c:url value="/webjars/bootstrap/4.1.3/css/bootstrap.min.css" />" rel="stylesheet">
+    <link href="/resources/css/main.css" rel="stylesheet">
 
     <title>En Commun - Dashboard</title>
 </head>
 <%@ include file="header.jsp" %>
 <body>
 
-    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <c:if test="${!empty mCourant}">
+    <div class="main-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <c:if test="${!empty loginCourant}">
             <h1 class="display-4">
-                <c:out value="Bienvenu ${mCourant.surnom} !"/>
+                <c:out value="Bienvenu ${loginCourant} !"/>
             </h1>
         </c:if>
     </div>

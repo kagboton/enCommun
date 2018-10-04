@@ -1,8 +1,8 @@
-package modele.facade;
+package services;
 
-import modele.beans.Competence;
-import modele.beans.Membre;
-import modele.beans.Projet;
+import beans.Competence;
+import beans.Membre;
+import beans.Projet;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -42,31 +42,32 @@ public class Facade implements IFacade {
     }*/
 
     @Override
-    public boolean inscription(String login, String mdp, String surnom) {
+    public Membre inscription(String login, String mdp, String surnom) {
         //Verifions si le login n'est pas déja pris
         for(Membre m : membresInscrits){
             if(m.getLogin().equals(login)){
-                return false;
+                return null;
             }
         }
         //Si je suis ici c'est que le login n'est pas déjà pris
-        membresInscrits.add(new Membre(login, mdp, surnom));
+        Membre newMember = new Membre(login, mdp, surnom);
+        membresInscrits.add(newMember);
         //Je connecte directement le membre
-        membresConnectes.add(new Membre(login, mdp, surnom));
+        membresConnectes.add(newMember);
 
-        return true;
+        return newMember;
     }
 
     @Override
-    public boolean connexion(String login, String mdp) {
+    public Membre connexion(String login, String mdp) {
         //Verifions que le couple login et mot de passe existe
         for(Membre m: membresInscrits){
             if(m.getLogin().equals(login) && m.getMotDePasse().equals(mdp)){
                 membresConnectes.add(m);
-                return true;
+                return m;
             }
         }
-        return false;
+        return null;
     }
 
     @Override
