@@ -8,9 +8,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.WebRequest;
-import services.IFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import services.IMembreService;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -21,7 +21,7 @@ import javax.validation.Valid;
 public class Controleur {
 
     @Autowired
-    private IFacade facade;
+    private IMembreService membreService;
 
     /**
      * Accès à la page d'accueil
@@ -75,7 +75,7 @@ public class Controleur {
             return "connexion";
         }
 
-        Membre m = facade.connexion(membre.getLogin(), membre.getMotDePasse()); //connexion du membre
+        Membre m = membreService.findMemberByLogin(membre.getLogin()); //connexion du membre
 
         if(m != null){ //si le membre existe
             model.addAttribute("mCourant", m); //on ajoute le membre courant
@@ -100,7 +100,7 @@ public class Controleur {
             HttpSession session,
             Model model) {
 
-        if (facade.estConnecte((String)session.getAttribute("loginCourant"))) {
+        if ((String)session.getAttribute("loginCourant") != null) {
             return "dashboard";
         }
         model.addAttribute("membre", new Membre()); //pour faire fonctionner les tags spring
@@ -126,7 +126,8 @@ public class Controleur {
             return "inscription";
         }
 
-        Membre m = facade.inscription(membre.getLogin(), membre.getMotDePasse(), membre.getSurnom()); //inscription d'un nouveau membre
+        Membre m = new Membre(membre.getLogin(), membre.getMotDePasse(), membre.getSurnom()); //création d'un nouveau membre
+        membreService.createMember(m); //persistance du nouveau membre dans la bdd
 
         if(m != null){
             model.addAttribute("mCourant", m); //on ajoute le membre courant
@@ -164,26 +165,22 @@ public class Controleur {
      * @return
      */
     @GetMapping(value = "/deconnexion")
-    public String deconnexion(@SessionAttribute(value = "loginCourant", required = false) String log, WebRequest request, SessionStatus sessionStatus, Model model){
+    public String deconnexion(@SessionAttribute(value = "loginCourant", required = false) String log,
+                              HttpSession session,
+                              WebRequest request,
+                              SessionStatus sessionStatus,
+                              Model model){
 
-        if(facade.estConnecte(log)){ //si le membre est bien connecte
-            Boolean deconnecte = facade.deconnexion(log); // deconnexion du membre
-            if (deconnecte){//la déconnexion s'est bien passée
-                sessionStatus.setComplete();
-                request.removeAttribute(log, WebRequest.SCOPE_SESSION);
-                model.addAttribute("okDeconnexion", "Deconnexion effectuée avec succès");
-                return "accueil";
-
-            }else{//la deconnexion s'est pas bien passée
-                model.addAttribute("erreurDeconnexion", "Deconnexion impossible");
-                return "accueil";
-            }
+        if((String)session.getAttribute("loginCourant") != null){ //si le membre est bien connecte
+            sessionStatus.setComplete();
+            request.removeAttribute(log, WebRequest.SCOPE_SESSION);
+            model.addAttribute("okDeconnexion", "Deconnexion effectuée avec succès");
+            return "accueil";
 
         }else{//Si le membre n'est pas connecté
             model.addAttribute("erreurDeconnexion", "Deconnexion impossible");
             return "accueil";
         }
-
 
     }
 

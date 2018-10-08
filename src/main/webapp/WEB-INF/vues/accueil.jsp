@@ -23,19 +23,19 @@
             <div class="alert alert-danger" role="alert">
                 <a href="#" class="close" data-dismiss="alert"
                    aria-label="close">×</a>
-                <strong>Erreur !</strong><c:out value="${erreurDeconnexion}"/>
+                <strong>Erreur ! </strong><c:out value="${erreurDeconnexion}"/>
             </div>
         </c:if>
         <c:if test="${!empty okDeconnexion}">
             <div class="alert alert-success" role="success">
                 <a href="#" class="close" data-dismiss="alert"
                    aria-label="close">×</a>
-                <strong>OK !</strong><c:out value="${okDeconnexion}"/>
+                <strong>OK ! </strong><c:out value="${okDeconnexion}"/>
             </div>
         </c:if>
         <h1 class="display-4">EnCommun</h1>
         <p class="lead">Bienvenu sur EnCommun. L'outil collaboratif qui vous permet de gérer vos projets en toute simplicité. Ensemble relevons les plus grands défis.</p>
-        <c:if test="${empty loginCourant}">
+        <c:if test="${empty sessionScope.loginCourant}">
             <a class="btn btn-outline-primary" href="/connexion">Connexion</a>
         </c:if>
 
