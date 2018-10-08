@@ -75,7 +75,7 @@ public class Controleur {
             return "connexion";
         }
 
-        Membre m = facade.findMemberByLogin(membre.getLogin()); //connexion du membre
+        Membre m = facade.connexion(membre.getLogin(), membre.getMotDePasse()); //connexion du membre
 
         if(m != null){ //si le membre existe
             model.addAttribute("mCourant", m); //on ajoute le membre courant
@@ -126,8 +126,7 @@ public class Controleur {
             return "inscription";
         }
 
-        Membre m = new Membre(membre.getLogin(), membre.getMotDePasse(), membre.getSurnom()); //création d'un nouveau membre
-        facade.createMember(m); //persistance du nouveau membre dans la bdd
+        Membre m = facade.inscription(membre.getLogin(), membre.getMotDePasse(), membre.getSurnom()); //création d'un nouveau membre et persistance du nouveau membre dans la bdd
 
         if(m != null){
             model.addAttribute("mCourant", m); //on ajoute le membre courant
@@ -138,7 +137,6 @@ public class Controleur {
                     new ObjectError("membre", "Utilisateur déja existant !"));//on ajoute une erreur de niveau objet
             return "inscription";
         }
-
     }
 
     /**
@@ -172,10 +170,16 @@ public class Controleur {
                               Model model){
 
         if((String)session.getAttribute("loginCourant") != null){ //si le membre est bien connecte
-            sessionStatus.setComplete();
-            request.removeAttribute(log, WebRequest.SCOPE_SESSION);
-            model.addAttribute("okDeconnexion", "Deconnexion effectuée avec succès");
-            return "accueil";
+            boolean deconnecte = facade.deconnexion(log);
+            if (deconnecte){
+                sessionStatus.setComplete();
+                request.removeAttribute(log, WebRequest.SCOPE_SESSION);
+                model.addAttribute("okDeconnexion", "Deconnexion effectuée avec succès");
+                return "accueil";
+            }else {
+                model.addAttribute("erreurDeconnexion", "Deconnexion impossible");
+                return "accueil";
+            }
 
         }else{//Si le membre n'est pas connecté
             model.addAttribute("erreurDeconnexion", "Deconnexion impossible");
