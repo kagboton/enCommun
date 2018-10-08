@@ -19,7 +19,7 @@ public class Membre {
     @NotBlank
     private String login;
 
-    @Column(name = "MOTDEPASSE")
+    @Column(name = "MOTDEPASSE", nullable = false)
     @NotNull
     @NotBlank
     private String motDePasse;
