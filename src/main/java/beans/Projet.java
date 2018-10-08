@@ -45,7 +45,7 @@ public class Projet {
         return responsable;
     }
 
-    public void changerResponsable(Membre responsable) {
+   /* public void changerResponsable(Membre responsable) {
         this.responsable = responsable;
         this.responsable.dirigerProjet(this);
     }
@@ -54,7 +54,7 @@ public class Projet {
         participant.participerProjet(this);
         this.membres.add(participant);
 
-    }
+    }*/
 
     public List<Competence> listerCompetencesProjet() {
         return competences;
