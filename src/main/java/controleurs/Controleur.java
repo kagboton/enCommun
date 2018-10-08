@@ -10,7 +10,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import services.IMembreService;
+import services.IFacade;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -21,7 +21,7 @@ import javax.validation.Valid;
 public class Controleur {
 
     @Autowired
-    private IMembreService membreService;
+    private IFacade facade;
 
     /**
      * Accès à la page d'accueil
@@ -75,7 +75,7 @@ public class Controleur {
             return "connexion";
         }
 
-        Membre m = membreService.findMemberByLogin(membre.getLogin()); //connexion du membre
+        Membre m = facade.findMemberByLogin(membre.getLogin()); //connexion du membre
 
         if(m != null){ //si le membre existe
             model.addAttribute("mCourant", m); //on ajoute le membre courant
@@ -127,7 +127,7 @@ public class Controleur {
         }
 
         Membre m = new Membre(membre.getLogin(), membre.getMotDePasse(), membre.getSurnom()); //création d'un nouveau membre
-        membreService.createMember(m); //persistance du nouveau membre dans la bdd
+        facade.createMember(m); //persistance du nouveau membre dans la bdd
 
         if(m != null){
             model.addAttribute("mCourant", m); //on ajoute le membre courant

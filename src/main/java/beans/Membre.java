@@ -1,8 +1,6 @@
 package beans;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,13 +25,15 @@ public class Membre {
     @Column(name = "SURNOM")
     private String surnom;
 
-/*
+    @ManyToMany(mappedBy = "membres")
     private List<Projet> projetsParticites; //un membre peut participer à un ou plusieurs projets
+
+    @OneToMany(mappedBy = "responsable")
     private List<Projet> projetsDiriges; //un membre peut être responsable d'un ou de plusieurs projets
 
-
+    @OneToMany(mappedBy = "membre")
     private List<CompetenceMembre> competencesMembres; //un membre possede une ou plusieurs competences
-*/
+
 
     /**
      * Constructeur par défaut
@@ -51,9 +51,9 @@ public class Membre {
         this.login = login;
         this.motDePasse = motDePasse;
         this.surnom = surnom;
-        /*projetsDiriges = new ArrayList<Projet>();
+        projetsDiriges = new ArrayList<Projet>();
         projetsParticites = new ArrayList<Projet>();
-        competencesMembres = new ArrayList<CompetenceMembre>();*/
+        competencesMembres = new ArrayList<CompetenceMembre>();
     }
 
     //Methods
@@ -82,7 +82,8 @@ public class Membre {
         this.surnom = surnom;
     }
 
-    /*public List<Projet> listerProjetsDiriges() {
+
+    public List<Projet> listerProjetsDiriges() {
         return projetsDiriges;
     }
 
@@ -93,6 +94,7 @@ public class Membre {
     public void participerProjet(Projet projet){
         projetsParticites.add(projet);
     }
+
     public List<Projet> listerProjetsParticipes() {
         return projetsParticites;
     }
@@ -103,5 +105,5 @@ public class Membre {
 
     public void setCompetencesMembres(List<CompetenceMembre> competencesMembres) {
         this.competencesMembres = competencesMembres;
-    }*/
+    }
 }

@@ -1,12 +1,26 @@
 package beans;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Competence {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID_COMPETENCE")
+    private int id;
+
+    @Column(name = "INTITULE_COMPETENCE")
     private String intituleC;
+
+    @Column(name = "DESCRIPTION_COMPETENCE")
     private String descriptionC;
+
+    @ManyToMany(mappedBy = "competences")
     private List<Projet> projets;
+
+    @OneToMany(mappedBy = "competence")
     private List<CompetenceMembre> competenceMembres;
 
     public Competence(String intituleC, String descriptionC) {

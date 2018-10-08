@@ -1,11 +1,27 @@
 package beans;
 
+import javax.persistence.*;
+
+@Entity
 public class CompetenceMembre {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID_COMPETENCE_MEMBRE")
+    private int id;
+
+    @Column(name = "NIVEAU")
     private int niveau;
+
+    @Column(name = "COMMENTAIRE")
     private String commentaire;
 
+    @ManyToOne
+    @JoinColumn(name = "MEMBRE_ID")
     private Membre membre;
+
+    @ManyToOne
+    @JoinColumn(name = "COMPETENCE_ID")
     private Competence competence;
 
     public CompetenceMembre(int niveau, String commentaire) {
