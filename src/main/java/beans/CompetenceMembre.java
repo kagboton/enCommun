@@ -1,6 +1,8 @@
 package beans;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class CompetenceMembre {
@@ -24,9 +26,20 @@ public class CompetenceMembre {
     @JoinColumn(name = "COMPETENCE_ID")
     private Competence competence;
 
+    public CompetenceMembre() {
+    }
+
     public CompetenceMembre(int niveau, String commentaire) {
         this.niveau = niveau;
         this.commentaire = commentaire;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getNiveau() {

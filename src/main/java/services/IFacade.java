@@ -1,6 +1,10 @@
 package services;
 
+import beans.Competence;
+import beans.CompetenceMembre;
 import beans.Membre;
+
+import java.util.List;
 
 public interface IFacade {
 
@@ -43,4 +47,26 @@ public interface IFacade {
      * @return true si le membre est connecté, false sinon
      */
     public boolean estConnecte(String login);
+
+    /**
+     *
+     * @return toutes les competences de la bdd
+     */
+    public List<Competence> getAllCompetences();
+
+
+    /**
+     * Méthode pour ajouter une competence à un membre
+     * @param niveau
+     * @param commentaire
+     * @param login,
+     * @param intituleC
+     */
+    public void ajouterCompetenceMembre(int niveau, String commentaire, String login, String intituleC);
+
+
+    public Competence findCompetenceByIntitule(String intitule);
+
+    public List<CompetenceMembre> getCompetenceMembreListByMemberLogin(String login);
+
 }

@@ -6,11 +6,8 @@ import java.util.List;
 
 @Entity
 public class Projet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_PROJET")
-    private int id;
 
+    @Id
     @Column(name = "INTITULE_PROJET")
     private String intituleP;
 
@@ -23,7 +20,7 @@ public class Projet {
     private List<Membre> membres; //un projet reçoit la contribution de plusieurs membres
 
     @ManyToOne
-    @JoinColumn(name = "MEMBRE_ID")
+    @JoinColumn(name = "RESPONSABLE_ID")
     private Membre responsable; //un projet est dirigé par un seul responsable
 
     @ManyToMany

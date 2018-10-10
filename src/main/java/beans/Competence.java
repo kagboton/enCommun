@@ -6,15 +6,12 @@ import java.util.List;
 
 @Entity
 public class Competence {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_COMPETENCE")
-    private int id;
 
+    @Id
     @Column(name = "INTITULE_COMPETENCE")
     private String intituleC;
 
-    @Column(name = "DESCRIPTION_COMPETENCE")
+    @Column(name = "DESCRIPTION_COMPETENCE", nullable = false)
     private String descriptionC;
 
     @ManyToMany(mappedBy = "competences")
@@ -23,12 +20,16 @@ public class Competence {
     @OneToMany(mappedBy = "competence")
     private List<CompetenceMembre> competenceMembres;
 
+    public Competence() {
+    }
+
     public Competence(String intituleC, String descriptionC) {
         this.intituleC = intituleC;
         this.descriptionC = descriptionC;
         projets = new ArrayList<>();
         competenceMembres = new ArrayList<>();
     }
+
 
     public String getIntituleC() {
         return intituleC;

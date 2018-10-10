@@ -12,7 +12,7 @@ public class Membre {
 
     @Id
     @Column(name = "LOGIN")
-    @Size(min = 5, message = "Au - 5 caractères")
+    @Size(min = 4, message = "Au - 4 caractères")
     @NotNull
     @NotBlank
     private String login;

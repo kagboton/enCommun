@@ -1,6 +1,8 @@
 package controleurs;
 
 
+import beans.Competence;
+import beans.CompetenceMembre;
 import beans.Membre;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,9 +16,11 @@ import services.IFacade;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
-@SessionAttributes("loginCourant")
+@SessionAttributes({"loginCourant"})
 @RequestMapping("/")
 public class Controleur {
 
@@ -31,12 +35,6 @@ public class Controleur {
     public String accueil(){
         return "accueil";
     }
-
-    /**
-     * Accès à la page de connexion avec validation de saisies
-     * @param model
-     * @return la jsp de connexion
-     */
 
     /**
      * Accès à la page de connexion avec validation de saisies
@@ -188,10 +186,86 @@ public class Controleur {
 
     }
 
+    /**
+     * Accès à la page de toutes les competences qui existent
+     * @return la jsp comprtences
+     */
+    @GetMapping(value = "/competences")
+     public String listerCompetences(Model model){
+        List<Competence> competences = facade.getAllCompetences();
+        model.addAttribute("competences", competences);
+        return "competences";
+    }
+
+    /**
+     * Accès à la page de toutes les competences du membre courant
+     * @return la jsp mesCompetences
+     */
+    @GetMapping(value = "/mesCompetences")
+    public String listerCompetencesMembre(@SessionAttribute(value = "loginCourant", required = false) String log,
+                                          Model model){
+
+        if( facade.getCompetenceMembreListByMemberLogin(log).isEmpty()){
+            model.addAttribute("mesCompetences", facade.getCompetenceMembreListByMemberLogin(log));
+            model.addAttribute("messageKO", "Aucune compétences !");
+            return "mesCompetences";
+        }else {
+            model.addAttribute("mesCompetences", facade.getCompetenceMembreListByMemberLogin(log));
+            return "mesCompetences";
+        }
+
+    }
 
 
+    /**
+     * Accés à la page d'ajout d'une competence au membre courant
+     * @param model
+     * @return
+     */
+    @GetMapping(value = "/ajouterCompetence")
+    public String ajouterCompetence(Model model){
+        List<Competence> competences = facade.getAllCompetences(); //Liste de tous les membres à envoyer à la jsp
+        model.addAttribute("competences", competences);
+        model.addAttribute("competenceMembre", new CompetenceMembre()); //Pour faire fonctionner les tags spring
+        return "ajouterCompetence";
+    }
 
+    /**
+     * Ajouter une competence au membre courant
+     * @param competenceMembre
+     * @param request
+     * @param result
+     * @param model
+     * @return la jsp des competence du membre si tout se passe bien
+     */
+    @PostMapping(value = "/ajouterCompetence")
+    public String handleAjouterCompetence(@ModelAttribute("competenceMembre") @Valid CompetenceMembre competenceMembre,
+                                          @SessionAttribute(value = "loginCourant", required = false) String log,
+                                          HttpSession session,
+                                          WebRequest request,
+                                          BindingResult result,
+                                          Model model){
 
+        if (result.hasErrors()){
+            //Envoi des erreurs
+            model.addAttribute("message", "Ajout impossible !");
+            model.addAttribute("competences", facade.getAllCompetences());
+            result.addError(
+                    new ObjectError("competenceMembre", "Ajout impossible!"));
+            return "ajouterCompetence";
+        }
 
+        String intituleC = request.getParameter("intituleC");
 
+        facade.ajouterCompetenceMembre(
+                (Integer)competenceMembre.getNiveau(),
+                competenceMembre.getCommentaire(),
+                log,
+                intituleC);
+        model.addAttribute("message", "L'ajout s'est bien passé !");
+        model.addAttribute("mesCompetences", facade.getCompetenceMembreListByMemberLogin(log)); //envoyer les competences du membre
+
+        return "mesCompetences";
+
+    }
 }
