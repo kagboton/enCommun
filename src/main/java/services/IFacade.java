@@ -69,4 +69,10 @@ public interface IFacade {
 
     public List<CompetenceMembre> getCompetenceMembreListByMemberLogin(String login);
 
+    /**
+     * Méthode pour supprimer une comptence membre du membre courant
+     * @param id
+     */
+    public boolean supprimerCompetenceMembre(int id);
+
 }

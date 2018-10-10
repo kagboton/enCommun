@@ -13,7 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="webjars/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="/resources/css/main.css" rel="stylesheet">
+    <link href="/resources/css/material-icons.css" rel="stylesheet">
 
     <title>En Commun - Dashboard</title>
 </head>
@@ -108,6 +110,11 @@
                         <td><c:out value="${maCompetence.competence.intituleC}"></c:out></td>
                         <td><c:out value="${maCompetence.niveau}"></c:out></td>
                         <td><c:out value="${maCompetence.commentaire}"></c:out></td>
+                        <td>
+                            <c:url value="/supprimerCompetenceMembre" var="url">
+                                <c:param name="id" value="${maCompetence.id}"/>
+                            </c:url><a href="${url}" class=".octicon-x"><i class="material-icons md-36 md-dark">delete_forever</i></a>
+                        </td>
                     </tr>
                 </c:forEach>
 

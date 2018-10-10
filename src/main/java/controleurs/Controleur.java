@@ -268,4 +268,28 @@ public class Controleur {
         return "mesCompetences";
 
     }
+
+    @GetMapping(value = "/supprimerCompetenceMembre")
+    public String supprimerCompetenceMembre(@ModelAttribute("competenceMembre") @Valid CompetenceMembre competenceMembre,
+                                            @SessionAttribute(value = "loginCourant", required = false) String log,
+                                            @RequestParam(value = "id") int idCompetenceMembre,
+                                            HttpSession session,
+                                            WebRequest request,
+                                            BindingResult result,
+                                            Model model){
+
+        boolean delete = facade.supprimerCompetenceMembre(idCompetenceMembre);
+
+        if(delete){
+            model.addAttribute("message", "Compétence membre bien supprimée");
+            model.addAttribute("mesCompetences", facade.getCompetenceMembreListByMemberLogin(log)); //envoyer les competences du membre
+            return "mesCompetences";
+        }else {
+            model.addAttribute("messageKO", "Aucune compétence membre supprimée");
+            model.addAttribute("mesCompetences", facade.getCompetenceMembreListByMemberLogin(log)); //envoyer les competences du membre
+            return "mesCompetences";
+
+        }
+
+    }
 }

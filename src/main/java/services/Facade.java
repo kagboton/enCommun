@@ -145,6 +145,17 @@ public class Facade implements IFacade {
     }
 
 
+    @Override
+    @Transactional
+    public boolean supprimerCompetenceMembre(int id) {
+        //je recupère la competence membre dont l'id est passée en paramètre
+        CompetenceMembre competenceMembre = em.find(CompetenceMembre.class, id);
 
-
+        if(competenceMembre != null){
+            em.remove(competenceMembre);
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
