@@ -2,7 +2,7 @@ package beans;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Entity
 public class Projet {
@@ -17,7 +17,7 @@ public class Projet {
     @ManyToMany
     @JoinTable(name = "MEMBRE_PROJET", joinColumns = {@JoinColumn(name = "PROJET_ID")},
             inverseJoinColumns = {@JoinColumn(name = "MEMBRE_ID")})
-    private List<Membre> membres; //un projet reçoit la contribution de plusieurs membres
+    private Collection<Membre> membres; //un projet reçoit la contribution de plusieurs membres
 
     @ManyToOne
     @JoinColumn(name = "RESPONSABLE_ID")
@@ -26,7 +26,7 @@ public class Projet {
     @ManyToMany
     @JoinTable(name = "COMPETENCE_PROJET", joinColumns = {@JoinColumn(name = "PROJET_ID")},
             inverseJoinColumns = {@JoinColumn(name = "COMPETENCE_ID")})
-    private List<Competence> competences; //un projet necessite une ou plusieurs competences
+    private Collection<Competence> competences; //un projet necessite une ou plusieurs competences
 
     public Projet(String intituleP, String descriptionP) {
         this.intituleP = intituleP;
@@ -52,7 +52,7 @@ public class Projet {
     }
 
 
-    public List<Membre> listerMembres() {
+    public Collection<Membre> listerMembres() {
         return membres;
     }
 
@@ -75,7 +75,7 @@ public class Projet {
 
     }
 
-    public List<Competence> listerCompetencesProjet() {
+    public Collection<Competence> listerCompetencesProjet() {
         return competences;
     }
 

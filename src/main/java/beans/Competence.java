@@ -2,7 +2,7 @@ package beans;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Entity
 public class Competence {
@@ -15,10 +15,10 @@ public class Competence {
     private String descriptionC;
 
     @ManyToMany(mappedBy = "competences")
-    private List<Projet> projets;
+    private Collection<Projet> projets;
 
     @OneToMany(mappedBy = "competence")
-    private List<CompetenceMembre> competenceMembres;
+    private Collection<CompetenceMembre> competenceMembres;
 
     public Competence() {
     }
@@ -47,7 +47,7 @@ public class Competence {
         this.descriptionC = descriptionC;
     }
 
-    public List<Projet> projetsAssocies() {
+    public Collection<Projet> projetsAssocies() {
         return projets;
     }
 
@@ -55,11 +55,11 @@ public class Competence {
         this.projets.add(projet);
     }
 
-    public List<CompetenceMembre> getCompetenceMembres() {
+    public Collection<CompetenceMembre> getCompetenceMembres() {
         return competenceMembres;
     }
 
-    public void setCompetenceMembres(List<CompetenceMembre> competenceMembres) {
+    public void setCompetenceMembres(Collection<CompetenceMembre> competenceMembres) {
         this.competenceMembres = competenceMembres;
     }
 }
