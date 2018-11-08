@@ -4,6 +4,7 @@ package controleurs;
 import beans.Competence;
 import beans.CompetenceMembre;
 import beans.Membre;
+import beans.Projet;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -17,6 +18,7 @@ import services.IFacade;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -192,7 +194,7 @@ public class Controleur {
      */
     @GetMapping(value = "/competences")
      public String listerCompetences(Model model){
-        List<Competence> competences = facade.getAllCompetences();
+        Collection<Competence> competences = facade.getAllCompetences();
         model.addAttribute("competences", competences);
         return "competences";
     }
@@ -224,7 +226,7 @@ public class Controleur {
      */
     @GetMapping(value = "/ajouterCompetence")
     public String ajouterCompetence(Model model){
-        List<Competence> competences = facade.getAllCompetences(); //Liste de tous les membres à envoyer à la jsp
+        Collection<Competence> competences = facade.getAllCompetences(); //Liste de tous les membres à envoyer à la jsp
         model.addAttribute("competences", competences);
         model.addAttribute("competenceMembre", new CompetenceMembre()); //Pour faire fonctionner les tags spring
         return "ajouterCompetence";
@@ -292,4 +294,63 @@ public class Controleur {
         }
 
     }
+
+
+    /**
+     * Accés à la page d'ajout d'un nouveau projet
+     * @param model
+     * @return
+     */
+    @GetMapping(value = "/ajouterProjet")
+    public String ajouterProjet(Model model, @SessionAttribute(value = "loginCourant", required = false) String log){
+        model.addAttribute("projet", new Projet()); //pour faire fonctionner les tags spring
+        model.addAttribute("mesCompetences", facade.getCompetenceMembreListByMemberLogin(log)); //envoyer les competences du membre
+       return  "ajouterProjet";
+    }
+
+    @PostMapping(value = "/ajouterProjet")
+    public String handleAjouterProjet(@ModelAttribute("projet") @Valid Projet projet,
+                                      @SessionAttribute(value = "loginCourant", required = false) String log,
+                                      HttpSession session,
+                                      WebRequest request,
+                                      BindingResult result,
+                                      Model model){
+
+        if (result.hasErrors()){
+            //Envoi des erreurs
+            model.addAttribute("message", "Ajout impossible !");
+            model.addAttribute("mesCompetences", facade.getCompetenceMembreListByMemberLogin(log)); //envoyer les competences du membre
+            result.addError(
+                    new ObjectError("projet", "Ajout impossible!"));
+            return "ajouterProjet";
+        }
+
+        String intituleP = request.getParameter("intituleP");
+        String descriptionP = request.getParameter("descriptionP");
+
+        facade.ajouterProjet(intituleP, descriptionP, log);
+        model.addAttribute("message", "L'ajout s'est bien passé !");
+        model.addAttribute("mesProjets", facade.getMemberProjectsListByMemberLogin(log)); //envoyer les competences du membre
+
+        return  "mesProjets";
+    }
+
+    /**
+     * Accès à la page de tous les projets du membre courant
+     * @return la jsp mesProjets
+     */
+    @GetMapping(value = "/mesProjets")
+    public String listerProjetsMembre(@SessionAttribute(value = "loginCourant", required = false) String log,
+                                          Model model){
+
+        if( facade.getMemberProjectsListByMemberLogin(log).isEmpty()){
+            model.addAttribute("messageKO", "Aucun projet !");
+            return "mesProjets";
+        }else {
+            model.addAttribute("mesProjets", facade.getMemberProjectsListByMemberLogin(log));
+            return "mesProjets";
+        }
+
+    }
+
 }

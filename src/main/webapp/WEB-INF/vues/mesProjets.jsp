@@ -13,7 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="webjars/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="/resources/css/main.css" rel="stylesheet">
+    <link href="/resources/css/material-icons.css" rel="stylesheet">
 
     <title>En Commun - Dashboard</title>
 </head>
@@ -56,7 +58,7 @@
                 <a class="nav-link" href="/dashboard">Tableau de bord</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/competences">Liste des compétences</a>
+                <a class="nav-link" href="/competences">Liste des compétences</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/mesCompetences">Mes compétences</a>
@@ -68,41 +70,74 @@
                 <a class="nav-link" href="/ajouterProjet">Ajouter un projet</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/mesProjets">Mes Projets</a>
+                <a class="nav-link active" href="/mesProjets">Mes Projets</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/deconnexion">Deconnexion</a>
-            </li>
             </li>
         </ul>
     </header>
 
     <div class="main-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center ">
         <h1 class="display-4">
-            Les compétences
+            Mes projets
         </h1>
     </div>
 
-    <div class="container">
-        <table class="table table-hover table-bordered">
-            <thead class="thead-light">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Intitulé</th>
-                <th scope="col">Description</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${competences}" var="competence" varStatus="status">
-                <tr>
-                    <th scope="row"><c:out value="${ status.count }" /></th>
-                    <td><c:out value="${competence.intituleC}"></c:out></td>
-                    <td><c:out value="${competence.descriptionC}"></c:out></td>
-                </tr>
-            </c:forEach>
 
-            </tbody>
-        </table>
+    <div class="container">
+
+        <c:if test="${!empty message}">
+            <div class="alert alert-success" role="alert">
+                <a href="#" class="close" data-dismiss="alert"
+                   aria-label="close">×</a>
+                <strong>OK ! </strong><c:out value="${message}"/>
+            </div>
+        </c:if>
+
+        <c:if test="${!empty messageKO}">
+            <div class="alert alert-danger" role="alert">
+                <a href="#" class="close" data-dismiss="alert"
+                   aria-label="close">×</a>
+                <c:out value="${messageKO}"/>
+            </div>
+        </c:if>
+
+        <c:if test="${!empty mesProjets}">
+            <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Intitule</th>
+                    <th scope="col">Decription</th>
+                    <th scope="col">Responsable</th>
+                    <th scope="col">Compétences</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${mesProjets}" var="monProjet">
+                    <tr>
+                        <td><c:out value="${monProjet.intituleP}"></c:out></td>
+                        <td><c:out value="${monProjet.descriptionP}"></c:out></td>
+                        <td><c:out value="${monProjet.responsable.login}"></c:out></td>
+                        <td>to do</td>
+                        <td>
+                            <c:url value="/ajouterCompetenceProjet" var="url">
+                                <c:param name="id" value="${monProjet.id}"/>
+                            </c:url><a href="${url}" class=".octicon-x"><i class="material-icons md-36 md-dark">add_box</i></a>
+                            <c:url value="/supprimerProjet" var="url">
+                                <c:param name="id" value="${monProjet.id}"/>
+                            </c:url><a href="${url}" class=".octicon-x"><i class="material-icons md-36 md-dark">delete_forever</i></a>
+                        </td>
+                    </tr>
+                </c:forEach>
+
+                </tbody>
+            </table>
+        </c:if>
+
+
+
 
 
 

@@ -32,8 +32,10 @@
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="/dashboard">Tableau de bord</a>
                             <a class="dropdown-item" href="/competences">Liste des competences</a>
-                            <a class="dropdown-item" href="#">Mes compétences</a>
-                            <a class="dropdown-item" href="/dashboard">S'ajouter une compétence</a>
+                            <a class="dropdown-item" href="/mesCompetences">Mes compétences</a>
+                            <a class="dropdown-item" href="/ajouterCompetence">S'ajouter une compétence</a>
+                            <a class="dropdown-item" href="/ajouterProjet">Ajouter un projet</a>
+                            <a class="dropdown-item" href="/mesProjets">Mes projets</a>
                             <a class="dropdown-item" href="/deconnexion">Deconnexion</a>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: KilianAgboton
@@ -14,6 +15,7 @@
 
     <link rel="stylesheet" href="webjars/bootstrap/4.1.3/css/bootstrap.min.css">
     <link href="/resources/css/main.css" rel="stylesheet">
+    <link href="/resources/css/form.css" rel="stylesheet">
 
     <title>En Commun - Dashboard</title>
 </head>
@@ -56,7 +58,7 @@
                 <a class="nav-link" href="/dashboard">Tableau de bord</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/competences">Liste des compétences</a>
+                <a class="nav-link" href="/competences">Liste des compétences</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/mesCompetences">Mes compétences</a>
@@ -65,7 +67,7 @@
                 <a class="nav-link" href="/ajouterCompetence">Ajouter une compétence</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/ajouterProjet">Ajouter un projet</a>
+                <a class="nav-link active" href="/ajouterProjet">Ajouter un projet</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/mesProjets">Mes Projets</a>
@@ -73,38 +75,63 @@
             <li class="nav-item">
                 <a class="nav-link" href="/deconnexion">Deconnexion</a>
             </li>
-            </li>
         </ul>
     </header>
 
     <div class="main-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center ">
         <h1 class="display-4">
-            Les compétences
+            Ajouter un projet
         </h1>
     </div>
 
-    <div class="container">
-        <table class="table table-hover table-bordered">
-            <thead class="thead-light">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Intitulé</th>
-                <th scope="col">Description</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${competences}" var="competence" varStatus="status">
-                <tr>
-                    <th scope="row"><c:out value="${ status.count }" /></th>
-                    <td><c:out value="${competence.intituleC}"></c:out></td>
-                    <td><c:out value="${competence.descriptionC}"></c:out></td>
-                </tr>
-            </c:forEach>
-
-            </tbody>
-        </table>
+    <div class="container text-center" id="myForm">
 
 
+        <form:form action="/ajouterProjet" method="post" class="form-signin" modelAttribute="projet">
+
+            <c:if test="${!empty message}">
+                <div class="alert alert-danger" role="alert">
+                    <a href="#" class="close" data-dismiss="alert"
+                       aria-label="close">×</a>
+                    <strong>Erreur ! </strong><c:out value="${message}"/>
+                </div>
+            </c:if>
+
+
+            <div class="form-group">
+                <form:label path="intituleP" class="sr-only">Intitulé :</form:label>
+                <form:input path="intituleP" class="form-control" placeholder="Intitule" />  <form:errors path="intituleP" cssStyle="color:red;"/>
+            </div>
+            <div class="form-group">
+                <form:label path="descriptionP" class="sr-only">Description :</form:label>
+                <form:textarea path="descriptionP" class="form-control" placeholder="Description"/>  <form:errors path="descriptionP" cssStyle="color:red;"/>
+            </div>
+            <fieldset class="form-group">
+                <div class="row">
+                    <legend class="col-form-label col-sm-2 pt-0">Compétences projet</legend>
+                    <div class="col-sm-10">
+
+
+                        <c:forEach items="${mesCompetences}" var="maCompetence" varStatus="status">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="gridCheckbox" id="${status.count}" value="${maCompetence.competence.intituleC}">
+                                <label class="form-check-label" for="${status.count}">
+                                    <c:out value="${maCompetence.competence.intituleC}"/>
+                                </label>
+                            </div>
+
+                        </c:forEach>
+
+
+
+                    </div>
+                </div>
+            </fieldset>
+            <form:errors cssStyle="color:red;"/>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Ajouter</button>
+
+
+        </form:form>
 
     </div>
 </div>

@@ -5,7 +5,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+
 
 @Entity
 public class Membre {
@@ -26,13 +27,13 @@ public class Membre {
     private String surnom;
 
     @ManyToMany(mappedBy = "membres")
-    private List<Projet> projetsParticites; //un membre peut participer à un ou plusieurs projets
+    private Collection<Projet> projetsParticites; //un membre peut participer à un ou plusieurs projets
 
     @OneToMany(mappedBy = "responsable")
-    private List<Projet> projetsDiriges; //un membre peut être responsable d'un ou de plusieurs projets
+    private Collection<Projet> projetsDiriges; //un membre peut être responsable d'un ou de plusieurs projets
 
     @OneToMany(mappedBy = "membre")
-    private List<CompetenceMembre> competencesMembres; //un membre possede une ou plusieurs competences
+    private Collection<CompetenceMembre> competencesMembres; //un membre possede une ou plusieurs competences
 
 
     /**
@@ -83,7 +84,7 @@ public class Membre {
     }
 
 
-    public List<Projet> listerProjetsDiriges() {
+    public Collection<Projet> listerProjetsDiriges() {
         return projetsDiriges;
     }
 
@@ -95,15 +96,15 @@ public class Membre {
         projetsParticites.add(projet);
     }
 
-    public List<Projet> listerProjetsParticipes() {
+    public Collection<Projet> listerProjetsParticipes() {
         return projetsParticites;
     }
 
-    public List<CompetenceMembre> getCompetencesMembres() {
+    public Collection<CompetenceMembre> getCompetencesMembres() {
         return competencesMembres;
     }
 
-    public void setCompetencesMembres(List<CompetenceMembre> competencesMembres) {
+    public void setCompetencesMembres(Collection<CompetenceMembre> competencesMembres) {
         this.competencesMembres = competencesMembres;
     }
 }

@@ -3,6 +3,7 @@ package services;
 import beans.Competence;
 import beans.CompetenceMembre;
 import beans.Membre;
+import beans.Projet;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -10,10 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class Facade implements IFacade {
@@ -24,11 +22,13 @@ public class Facade implements IFacade {
     Query q;
 
 
-    private List<Membre> membresInscrits;
-    private List<Membre> membresConnectes;
-    private List<Competence> competences;
-    private Map<String, List<CompetenceMembre>> competencesMembre;
-    List<CompetenceMembre> competenceMembreList;
+    private Collection<Membre> membresInscrits;
+    private Collection<Membre> membresConnectes;
+    private Collection<Competence> competences;
+    private Collection<Projet> allProjects;
+    private Map<String, Collection<Projet>> projetsMembre;
+    private Map<String, Collection<CompetenceMembre>> competencesMembre;
+    private Collection<CompetenceMembre> competenceMembreList;
 
     /**
      * Methode d'initialisation des listes avec les objets créés
@@ -42,6 +42,8 @@ public class Facade implements IFacade {
         competences = new ArrayList<>();
         competencesMembre = new HashMap<>();
         competenceMembreList =  new ArrayList<>();
+        projetsMembre = new HashMap<>();
+        allProjects = new ArrayList<>();
 
         //Recupération des membres inscrits depuis la bdd
         q = em.createQuery("select m from Membre m");
@@ -105,7 +107,7 @@ public class Facade implements IFacade {
     }
 
     @Override
-    public List<Competence> getAllCompetences(){
+    public Collection<Competence> getAllCompetences(){
         //Recupération des compétences depuis la bdd
         q = em.createQuery("select c from Competence c");
         competences = q.getResultList();
@@ -134,12 +136,12 @@ public class Facade implements IFacade {
         em.persist(competenceMembre);
     }
 
-    public List<CompetenceMembre> getCompetenceMembreListByMemberLogin(String login){
+    public Collection<CompetenceMembre> getCompetenceMembreListByMemberLogin(String login){
 
         q = em.createQuery("select m.competencesMembres from Membre m where m.login like :login");
         q.setParameter("login", login);
 
-        List<CompetenceMembre> competenceMembreList = q.getResultList();
+       competenceMembreList = q.getResultList();
 
         return  competenceMembreList;
     }
@@ -158,4 +160,38 @@ public class Facade implements IFacade {
             return false;
         }
     }
+
+
+    @Override
+    @Transactional
+    public void ajouterProjet(String intitule, String description, String login) {
+        Projet projet = new Projet(intitule, description); //Nouveau projet
+        Membre membreCourant = this.findMemberByLogin(login);//Récupération de l'instance du membre courant
+
+        //Mise à jour du responsable du projet
+        projet.changerResponsable(membreCourant);
+        projet.ajouterMembre(membreCourant);
+
+        //Persistence des informations
+        allProjects.add(projet);
+        projetsMembre.put(login, allProjects);
+        em.persist(projet);
+
+    }
+
+    @Override
+    public Collection<Projet> getMemberProjectsListByMemberLogin(String login) {
+        q = em.createQuery("select p from Projet p where p.responsable.login like :login");
+        q.setParameter("login", login);
+
+        allProjects = q.getResultList();
+
+        return  allProjects;
+    }
+
+
+
+    //TODO Ajouter des competences au projet créé.... pareil que l'ajout mais en f  ait met à jour juste les competences
+
+    //TODO Supprimer un projet
 }

@@ -3,8 +3,9 @@ package services;
 import beans.Competence;
 import beans.CompetenceMembre;
 import beans.Membre;
+import beans.Projet;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface IFacade {
 
@@ -52,7 +53,7 @@ public interface IFacade {
      *
      * @return toutes les competences de la bdd
      */
-    public List<Competence> getAllCompetences();
+    public Collection<Competence> getAllCompetences();
 
 
     /**
@@ -67,7 +68,7 @@ public interface IFacade {
 
     public Competence findCompetenceByIntitule(String intitule);
 
-    public List<CompetenceMembre> getCompetenceMembreListByMemberLogin(String login);
+    public Collection<CompetenceMembre> getCompetenceMembreListByMemberLogin(String login);
 
     /**
      * Méthode pour supprimer une comptence membre du membre courant
@@ -75,4 +76,14 @@ public interface IFacade {
      */
     public boolean supprimerCompetenceMembre(int id);
 
+    /**
+     * Méthode pour ajouter un nouveau projet
+     * @param intitule
+     * @param description
+     * @param login
+     */
+    public void ajouterProjet(String intitule, String description, String login);
+
+
+    public Collection<Projet> getMemberProjectsListByMemberLogin(String loging);
 }

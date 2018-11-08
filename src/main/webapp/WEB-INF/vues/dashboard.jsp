@@ -33,8 +33,10 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" href="/dashboard">Tableau de bord</a>
                                 <a class="dropdown-item" href="/competences">Liste des competences</a>
-                                <a class="dropdown-item" href="#">Mes compétences</a>
-                                <a class="dropdown-item" href="/dashboard">S'ajouter une compétence</a>
+                                <a class="dropdown-item" href="/mesCompetences">Mes compétences</a>
+                                <a class="dropdown-item" href="/ajouterCompetence">S'ajouter une compétence</a>
+                                <a class="dropdown-item" href="/ajouterProjet">Ajouter un projet</a>
+                                <a class="dropdown-item" href="/mesProjets">Mes projets</a>
                                 <a class="dropdown-item" href="/deconnexion">Deconnexion</a>
                             </div>
                         </div>
@@ -61,6 +63,12 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/ajouterCompetence">Ajouter une compétence</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ajouterProjet">Ajouter un projet</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mesProjets">Mes Projets</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/deconnexion">Deconnexion</a>
@@ -95,8 +103,8 @@
             </script>
         </div>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
+        <%--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+--%>
         <script src="webjars/jquery/3.3.1-1/jquery.min.js"></script>
         <script src="webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
