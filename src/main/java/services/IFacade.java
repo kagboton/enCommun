@@ -86,4 +86,12 @@ public interface IFacade {
 
 
     public Collection<Projet> getMemberProjectsListByMemberLogin(String loging);
+
+    /**
+     * Retrouver un membre par son login et son mot de passe
+     * @param login
+     * @param mdp
+     * @return un membre
+     */
+    public Membre chercherMembre(String login, String mdp);
 }

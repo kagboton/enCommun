@@ -7,9 +7,7 @@ import beans.Projet;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -53,18 +51,48 @@ public class Facade implements IFacade {
 
     @Override
     public Membre connexion(String login, String motDePasse) {
-        for(Membre m: membresInscrits){
-            if(m.getLogin().equals(login) && m.getMotDePasse().equals(motDePasse)){
-                membresConnectes.add(m);
-                return m;            }
-        }
-        return null;
+        Membre m = this.chercherMembre(login, motDePasse);
+        if(m!=null)
+            membresConnectes.add(m);
+        return m;
     }
 
     @Override
     public Membre findMemberByLogin(String login) {
         return em.find(Membre.class, login);
     }
+
+
+    @Override
+    public Membre chercherMembre(String login, String mdp){
+        /*
+            1. Soit on utilise un entityGraph pour recupérer toutes les collections attachées à l'entité membre (ce qui est fait ici).  Dans le class Membre, on n'effectue aucune règle
+            2. Soit on utilise un fetch eager associé à un fetchmode subselect dans la classe Membre sur les attributs à récupérer en même temps que le membre. L'entity manager sait alors qu'il doit tout récupérer et aller chercher les éléments quand on le lui demande. On a plus besoin d'utiliser entityGraph.
+            3. Soit on effectue la requete en commentaire (join fetch) sans l'entityGraph et sans le fetch eager dans Membre
+            4. Soit on fait une requete normal mais on applique uen opération sur les élément associé à Memebre qu'on veut récupérer
+        */
+
+        /*EntityGraph<Membre> entityGraph = em.createEntityGraph(Membre.class);
+        entityGraph.addSubgraph("projetsParticites");
+        entityGraph.addSubgraph("projetsDiriges");*/
+
+        Query q = em.createQuery("select m from Membre m where m.login=:login and  m.motDePasse=:mdp");
+        // "join fecth m.projetsParticites  join fetch m.projetsDiriges"
+        q.setParameter("login", login);
+        q.setParameter("mdp", mdp);
+        //q.setHint("javax.persistence.loadgraph", entityGraph);
+
+        try{
+            Membre m = (Membre) q.getSingleResult();
+            //m.getProjetsDiriges().size(); //opération qu'on peut faire pour attacher l'em. (methode 4)
+            //m.getProjetsParticites().size();
+            return m;
+        }catch (NoResultException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     @Transactional
     @Override
@@ -191,7 +219,7 @@ public class Facade implements IFacade {
 
 
 
-    //TODO Ajouter des competences au projet créé.... pareil que l'ajout mais en f  ait met à jour juste les competences
+    //TODO Ajouter des competences au projet créé.... pareil que l'ajout mais en fait met à jour juste les competences
 
     //TODO Supprimer un projet
 }

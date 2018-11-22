@@ -1,5 +1,8 @@
 package beans;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -26,13 +29,16 @@ public class Membre {
     @Column(name = "SURNOM")
     private String surnom;
 
-    @ManyToMany(mappedBy = "membres")
+    @ManyToMany(mappedBy = "membres", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private Collection<Projet> projetsParticites; //un membre peut participer à un ou plusieurs projets
 
-    @OneToMany(mappedBy = "responsable")
+    @OneToMany(mappedBy = "responsable", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private Collection<Projet> projetsDiriges; //un membre peut être responsable d'un ou de plusieurs projets
 
-    @OneToMany(mappedBy = "membre")
+    @OneToMany(mappedBy = "membre", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private Collection<CompetenceMembre> competencesMembres; //un membre possede une ou plusieurs competences
 
 
@@ -106,5 +112,21 @@ public class Membre {
 
     public void setCompetencesMembres(Collection<CompetenceMembre> competencesMembres) {
         this.competencesMembres = competencesMembres;
+    }
+
+    public Collection<Projet> getProjetsParticites() {
+        return projetsParticites;
+    }
+
+    public void setProjetsParticites(Collection<Projet> projetsParticites) {
+        this.projetsParticites = projetsParticites;
+    }
+
+    public Collection<Projet> getProjetsDiriges() {
+        return projetsDiriges;
+    }
+
+    public void setProjetsDiriges(Collection<Projet> projetsDiriges) {
+        this.projetsDiriges = projetsDiriges;
     }
 }
